@@ -1,0 +1,548 @@
+type json <ocaml module="Yojson.Safe"> = abstract
+
+(* Request or notification message *)
+type message = {
+  jsonrpc: string;
+  ?id: json nullable; (* If None, this message is notification *)
+  method_ <json name="method">: string;
+  ?params: message_params_constr nullable;
+} <ocaml field_prefix="message_">
+  <json adapter.ocaml="Message_json.Adapter.Message">
+
+type message_params_constr = [
+  | RequestInitialize <json name="initialize"> of initialize_params
+  | RequestTextDocumentCompletion <json name="textDocument/completion"> of completion_params
+  | RequestCompletionItemResolve <json name="completionItem/resolve"> of completion_item
+  | Unknown <json untyped> of (string * json nullable)
+  ]
+
+type response = {
+  jsonrpc: string;
+  id: json;
+  ?result: response_result_constr nullable;
+  ?error: response_error nullable;
+} <ocaml field_prefix="response_">
+
+type response_error = {
+  code: int;
+} <ocaml field_prefix="response_">
+
+type response_result_constr = [
+  | ResponseInitialize of initialize_result
+  | ResponseTextDocumentCompletion of completion_result
+  | ResponseCompletionItemResolve of completion_item
+  | Unknown <json untyped> of (string * json nullable)
+  ] <json adapter.ocaml="Message_json.Adapter.AsAny">
+
+
+type initialize_params = {
+  ?process_id <json name="processId">: int nullable;
+} <ocaml field_prefix="initialize_params_">
+
+type initialize_result = {
+  capabilities: server_capabilities;
+} <ocaml field_prefix="initialize_result_">
+
+
+
+(**
+ * Defines how the host (editor) should sync document changes to the language server.
+ *)
+type text_document_sync_kind = int wrap
+  <ocaml module="Message_json.TextDocumentSyncKind" t="Message_json.TextDocumentSyncKind.t">
+
+(**
+ * Completion options.
+ *)
+type completion_options = {
+  (**
+   * The server provides support to resolve additional
+   * information for a completion item.
+   *)
+   ?resolver_provider <json name="resolveProvider">: bool nullable;
+
+   (**
+	* The characters that trigger completion automatically.
+	*)
+   ?trigger_characters <json name="triggerCharacters">: string list nullable;
+} <ocaml field_prefix="completion_options_">
+
+(**
+ * Signature help options.
+ *)
+type signature_help_options = {
+  (**
+   * The characters that trigger signature help
+   * automatically.
+   *)
+   ?trigger_characters <json name="triggerCharacters">: string list nullable;
+} <ocaml field_prefix="signature_help_options_">
+
+(**
+ * Code Action options.
+ *)
+type code_action_options = {
+  (**
+   * CodeActionKinds that this server may return.
+   *
+   * The list of kinds may be generic, such as `CodeActionKind.Refactor`, or the server
+   * may list out every specific kind they provide.
+   *)
+  (* TODO: *)
+  (*?code_action_kinds <json name="codeActionKinds">: code_action_kind list nullable;*)
+
+  value: json (* Dummy, rest *)
+} <ocaml field_prefix="code_action_options_">
+
+(**
+ * Code Lens options.
+ *)
+type code_lens_options = {
+  (**
+   * Code lens has a resolve provider as well.
+   *)
+  ?resolve_provider <json name="resolveProvider">: bool nullable;
+} <ocaml field_prefix="code_lens_options_">
+
+(**
+ * Format document on type options.
+ *)
+type document_on_type_formatting_options = {
+  (**
+   * A character on which formatting should be triggered, like `}`.
+   *)
+  first_trigger_character <json name="firstTriggerCharacter">: string;
+
+  (**
+   * More trigger characters.
+   *)
+  ?more_trigger_character <json name="moreTriggerCharacter">: string list nullable;
+} <ocaml field_prefix="document_on_type_formatting_options_">
+
+(**
+ * Rename options
+ *)
+type rename_options = {
+  (**
+   * Renames should be checked and tested before being executed.
+   *)
+  ?prepare_provoder <json name="prepareProvider">: bool nullable;
+} <ocaml field_prefix="rename_options_">
+
+(**
+ * Document link options.
+ *)
+type document_link_options = {
+  (**
+   * Document links have a resolve provider as well.
+   *)
+  ?resolve_provider <json name="resolveProvider">: bool nullable;
+} <ocaml field_prefix="document_link_options_">
+
+(**
+ * Execute command options.
+ *)
+type execute_command_options = {
+  (**
+   * The commands to be executed on the server
+   *)
+  commands <json name="command">: string list;
+} <ocaml field_prefix="execute_command_options_">
+
+(**
+ * Save options.
+ *)
+type save_options = {
+  (**
+   * The client is supposed to include the content on save.
+   *)
+  ?include_text <json name="includeText">: bool nullable;
+} <ocaml field_prefix="save_options_">
+
+(**
+ * Color provider options.
+ *)
+type color_provoder_options = {
+  value: json (* Dummy, rest *)
+} <ocaml field_prefix="color_provoder_options_">
+
+(**
+ * Folding range provider options.
+ *)
+type folding_range_provider_options = {
+  value: json (* Dummy, rest *)
+} <ocaml field_prefix="folding_range_provider_options_">
+
+type text_document_sync_options = {
+  (**
+   * Open and close notifications are sent to the server.
+   *)
+  ?open_close <json name="openClose">: bool nullable;
+
+  (**
+   * Change notifications are sent to the server. See TextDocumentSyncKind.None, TextDocumentSyncKind.Full
+   * and TextDocumentSyncKind.Incremental. If omitted it defaults to TextDocumentSyncKind.None.
+   *)
+  ?change <json name="change">: text_document_sync_kind nullable;
+
+  (**
+   * Will save notifications are sent to the server.
+   *)
+  ?will_save <json name="willSave">: bool nullable;
+
+  (**
+   * Will save wait until requests are sent to the server.
+   *)
+  ?will_save_wait_until <json name="willSaveWaitUntil">: bool nullable;
+
+  (**
+   * Save notifications are sent to the server.
+   *)
+  ?save <json name="save">: save_options nullable;
+} <ocaml field_prefix="text_document_sync_options_">
+
+(**
+ * Static registration options to be returned in the initialize request.
+ *)
+type static_registration_options = {
+  (**
+   * The id used to register the request. The id can be used to deregister
+   * the request again. See also Registration#id.
+   *)
+  ?id <json name="id">: string nullable;
+} <ocaml field_prefix="static_registration_options_">
+
+type server_capabilities = {
+  (*
+   * Defines how text documents are synced. Is either a detailed structure defining each notification or
+   * for backwards compatibility the TextDocumentSyncKind number. If omitted it defaults to `TextDocumentSyncKind.None`.
+   *)
+  ?text_document_sync <json name="textDocumentSync">: text_document_sync_options nullable;
+
+  (**
+   * The server provides hover support.
+   *)
+  ?hover_provider <json name="hoverProvider">: bool nullable;
+
+  (**
+   * The server provides completion support.
+   *)
+  ?completion_provider <json name="completionProvider">: completion_options nullable;
+
+  (**
+   * The server provides signature help support.
+   *)
+  ?signature_help_provider <json name="signatureHelpProvider">: signature_help_options nullable;
+
+  (**
+   * The server provides goto definition support.
+   *)
+  ?definition_provider <json name="definitionProvider">: bool nullable;
+
+  (**
+   * The server provides Goto Type Definition support.
+   *
+   * Since 3.6.0
+   *)
+  (* TODO *)
+  (* typeDefinitionProvider?: boolean | (TextDocumentRegistrationOptions & StaticRegistrationOptions); *)
+
+  (**
+   * The server provides Goto Implementation support.
+   *
+   * Since 3.6.0
+   *)
+  (* TODO *)
+  (* implementationProvider?: boolean | (TextDocumentRegistrationOptions & StaticRegistrationOptions); *)
+
+  (**
+   * The server provides find references support.
+   *)
+  ?reference_provider <json name="referencesProvider">: bool nullable;
+
+  (**
+   * The server provides document highlight support.
+   *)
+  ?document_highlight_provider <json name="documentHighlightProvider">: bool nullable;
+
+  (**
+   * The server provides document symbol support.
+   *)
+  ?document_symbol_provider <json name="documentSymbolProvider">: bool nullable;
+
+  (**
+   * The server provides workspace symbol support.
+   *)
+  ?workspace_symbol_provider <json name="workspaceSymbolProvider">: bool nullable;
+
+  (**
+   * The server provides code actions. The `CodeActionOptions` return type is only
+   * valid if the client signals code action literal support via the property
+   * `textDocument.codeAction.codeActionLiteralSupport`.
+   *)
+  (* TODO *)
+  (* ?code_action_provider <json name="codeActionProvider">: boolean | CodeActionOptions; *)
+
+  (**
+   * The server provides code lens.
+   *)
+  ?code_lens_provider <json name="codeLensProvider">: code_lens_options nullable;
+
+  (**
+   * The server provides document formatting.
+   *)
+  ?document_formatting_provider <json name="documentFormattingProvider">: bool nullable;
+
+  (**
+   * The server provides document range formatting.
+   *)
+  ?document_range_formatting_provider <json name="documentRangeFormattingProvider">: bool nullable;
+
+  (**
+   * The server provides document formatting on typing.
+   *)
+  ?document_on_type_formatting_provider <json name="documentOnTypeFormattingProvider">: document_on_type_formatting_options nullable;
+
+  (**
+   * The server provides rename support. RenameOptions may only be
+   * specified if the client states that it supports
+   * `prepareSupport` in its initial `initialize` request.
+   *)
+  ?rename_provider <json name="renameProvider">: rename_options nullable;
+
+  (**
+   * The server provides document link support.
+   *)
+  ?document_link_provider <json name="documentLinkProvider">: document_link_options nullable;
+
+  (**
+   * The server provides color provider support.
+   *
+   * Since 3.6.0
+   *)
+  (* TODO *)
+  (*colorProvider?: boolean | ColorProviderOptions | (ColorProviderOptions & TextDocumentRegistrationOptions & StaticRegistrationOptions);*)
+
+  (**
+   * The server provides folding provider support.
+   *
+   * Since 3.10.0
+   *)
+  (* TODO *)
+  (* foldingRangeProvider?: boolean | FoldingRangeProviderOptions | (FoldingRangeProviderOptions & TextDocumentRegistrationOptions & StaticRegistrationOptions);*)
+
+  (**
+   * The server provides execute command support.
+   *)
+  ?execute_command_provider <json name="executeCommandProvider">: execute_command_options nullable;
+
+  (**
+   * Workspace specific server capabilities
+   *)
+  (* TODO *)
+  (*
+	workspace?: {
+		/**
+		 * The server supports workspace folder.
+		 *
+		 * Since 3.6.0
+		 */
+		workspaceFolders?: {
+			/**
+			* The server has support for workspace folders
+			*/
+			supported?: boolean;
+			/**
+			* Whether the server wants to receive workspace folder
+			* change notifications.
+			*
+			* If a strings is provided the string is treated as a ID
+			* under which the notification is registered on the client
+			* side. The ID can be used to unregister for these events
+			* using the `client/unregisterCapability` request.
+			*/
+			changeNotifications?: string | boolean;
+		}
+	}*)
+
+  (**
+   * Experimental server capabilities.
+   *)
+  ?experimental <json name="experimental">: json nullable;
+} <ocaml field_prefix="server_capabilities_">
+
+
+type completion_params = {
+  (**
+   * The completion context. This is only available if the client specifies
+   * to send this using `ClientCapabilities.textDocument.completion.contextSupport === true`
+   *)
+  ?context <json name="context">: completion_context nullable;
+} <ocaml field_prefix="completion_params_">
+
+(**
+ * How a completion was triggered
+ *)
+type completion_trigger_kind = int wrap
+  <ocaml module="Message_json.CompletionTriggerKind" t="Message_json.CompletionTriggerKind.t">
+
+(**
+ * Contains additional information about the context in which a completion request is triggered.
+ *)
+type completion_context = {
+  (**
+   * How the completion was triggered.
+   *)
+  trigger_kind <json name="triggerKind">: completion_trigger_kind;
+
+  (**
+   * The trigger character (a single character) that has trigger code complete.
+   * Is undefined if `triggerKind !== CompletionTriggerKind.TriggerCharacter`
+   *)
+  ?trigger_character <json name="triggerCharacter">: string nullable;
+} <ocaml field_prefix="completion_context_">
+
+type completion_result = completion_list
+
+(**
+ * Represents a collection of [completion items](#CompletionItem) to be presented
+ * in the editor.
+ *)
+type completion_list = {
+  (**
+   * This list it not complete. Further typing should result in recomputing
+   * this list.
+   *)
+  is_incomplete <json name="isIncomplete">: bool;
+
+  (**
+   * The completion items.
+   *)
+  items <json name="items">: completion_item list;
+} <ocaml field_prefix="completion_list_">
+
+(**
+ * Defines whether the insert text in a completion item should be interpreted as
+ * plain text or a snippet.
+ *)
+type insert_text_format = int wrap
+  <ocaml module="Message_json.InsertTextFormat" t="Message_json.InsertTextFormat.t">
+
+type completion_item = {
+  (**
+   * The label of this completion item. By default
+   * also the text that is inserted when selecting
+   * this completion.
+   *)
+  label <json name="label">: string;
+
+  (**
+   * The kind of this completion item. Based of the kind
+   * an icon is chosen by the editor.
+   *)
+  (* TODO *)
+  ?kind <json name="kind">: int nullable;
+
+  (**
+   * A human-readable string with additional information
+   * about this item, like type or symbol information.
+   *)
+  ?detail <json name="detail">: string nullable;
+
+  (**
+   * A human-readable string that represents a doc-comment.
+   *)
+  (* TODO *)
+  (*documentation?: string | MarkupContent;*)
+
+  (**
+   * Indicates if this item is deprecated.
+   *)
+  ?deprecated <json name="deprecated">: bool nullable;
+
+  (**
+   * Select this item when showing.
+   *
+   * *Note* that only one completion item can be selected and that the
+   * tool / client decides which item that is. The rule is that the *first*
+   * item of those that match best is selected.
+   *)
+  ?preselect <json name="preselect">: bool nullable;
+
+  (**
+   * A string that should be used when comparing this item
+   * with other items. When `falsy` the label is used.
+   *)
+  ?sort_text <json name="sortText">: string nullable;
+
+  (**
+   * A string that should be used when filtering a set of
+   * completion items. When `falsy` the label is used.
+   *)
+  ?filter_text <json name="filterText">: string nullable;
+
+  (**
+   * A string that should be inserted into a document when selecting
+   * this completion. When `falsy` the label is used.
+   *
+   * The `insertText` is subject to interpretation by the client side.
+   * Some tools might not take the string literally. For example
+   * VS Code when code complete is requested in this example `con<cursor position>`
+   * and a completion item with an `insertText` of `console` is provided it
+   * will only insert `sole`. Therefore it is recommended to use `textEdit` instead
+   * since it avoids additional client side interpretation.
+   *
+   * @deprecated Use textEdit instead.
+   *)
+  ?insert_text <json name="insertText">: string nullable;
+
+  (**
+   * The format of the insert text. The format applies to both the `insertText` property
+   * and the `newText` property of a provided `textEdit`.
+   *)
+  (* TODO *)
+  (*?insert_text_format <json name="insertTextFormat">: InsertTextFormat;*)
+
+  (**
+   * An edit which is applied to a document when selecting this completion. When an edit is provided the value of
+   * `insertText` is ignored.
+   *
+   * *Note:* The range of the edit must be a single line range and it must contain the position at which completion
+   * has been requested.
+   *)
+  (* TODO *)
+  (*textEdit?: TextEdit;*)
+
+  (**
+   * An optional array of additional text edits that are applied when
+   * selecting this completion. Edits must not overlap (including the same insert position)
+   * with the main edit nor with themselves.
+   *
+   * Additional text edits should be used to change text unrelated to the current cursor position
+   * (for example adding an import statement at the top of the file if the completion item will
+   * insert an unqualified type).
+   *)
+  (* TODO *)
+  (*additionalTextEdits?: TextEdit[];*)
+
+  (**
+   * An optional set of characters that when pressed while this completion is active will accept it first and
+   * then type that character. *Note* that all commit characters should have `length=1` and that superfluous
+   * characters will be ignored.
+   *)
+  ?commit_characters <json name="commitCharacters">: string list nullable;
+
+  (**
+   * An optional command that is executed *after* inserting this completion. *Note* that
+   * additional modifications to the current document should be described with the
+   * additionalTextEdits-property.
+   *)
+  (* TODO *)
+  (*command?: Command;*)
+
+  (**
+   * An data entry field that is preserved on a completion item between
+   * a completion and a completion resolve request.
+   *)
+  ?data <json name="data">: json nullable;
+} <ocaml field_prefix="completion_item_">

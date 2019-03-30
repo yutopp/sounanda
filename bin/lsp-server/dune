@@ -1,0 +1,9 @@
+(executables
+ (names main)
+ (libraries sounanda_lsp sounanda_parser stdio)
+ (preprocess
+  (pps ppx_let)))
+
+(install
+ (section bin)
+ (files (main.exe as sounanda-lsp-server)))

@@ -1,0 +1,32 @@
+opam-version: "2.0"
+name: "sounanda"
+version: "0.0.1"
+synopsis: "A sample project for a frontend of Sounanda programming language"
+description: """
+同人誌:進捗大陸05(技術書典6)の内容の一部のサンプルプロジェクトです．
+このリポジトリは，自作言語 Sounanda のフロントエンド実装であり，具体的には以下の内容が含まれます．
+- syntax checker
+- type checker
+- LSP server
+"""
+maintainer: "yutopp <yutopp@gmail.com>"
+author: "yutopp <yutopp@gmail.com>"
+license: "NYSL"
+homepage: "https://github.com/yutopp/sounanda"
+bug-reports: "https://github.com/yutopp/sounanda/issues"
+dev-repo: "https://github.com/yutopp/sounanda.git"
+depends: [
+  "ocaml"                      {build & >= "4.07.0"}
+  "ocamlfind"                  {build}
+  "dune"                       {build}
+  "base"                       {>= "v0.11.0"}
+  "stdio"                      {>= "v0.11.0"}
+  "yojson"                     {>= "1.4.1"}
+  "menhir"                     {>= "20181113"}
+  "stdint"                     {>= "0.5.1"}
+  "ppx_sexp_conv"              {>= "v0.11.2"}
+  "ppx_let"                    {>= "v0.11.0"}
+  "atd"                        {>= "2.0.0"}
+  "expect_test_helpers_kernel" {with-test}
+]
+build: ["dune" "build" "-p" name]

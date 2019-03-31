@@ -20,27 +20,16 @@
 
 ```elisp
 ;; Sounanda
-;; "~/repo/sounanda" は適宜変更してください
 (setq sounanda-base (expand-file-name "~/repo/sounanda"))
 
 (add-to-list 'load-path (concat (file-name-as-directory sounanda-base) "editor/emacs/"))
 (require 'sounanda-mode)
 
+(setq sounanda-lsp-server-bin (concat (file-name-as-directory sounanda-base)
+                                      "_build/install/default/bin/sounanda-lsp-server"))
+(require 'sounanda-lsp-client)
+
 (setq auto-mode-alist (cons '("\\.sounanda\\w?" . sounanda-mode) auto-mode-alist))
-
-(defgroup lsp-sounanda nil
-  "Sounanda."
-  :group 'lsp-mode
-  :tag "Sounanda")
-
-(add-to-list 'lsp-language-id-configuration '(sounanda-mode . "sounanda"))
-
-(defvar sounanda-lsp-server-bin (concat (file-name-as-directory sounanda-base)
-                                        "_build/install/default/bin/sounanda-lsp-server"))
-(lsp-register-client
- (make-lsp-client :new-connection (lsp-stdio-connection sounanda-lsp-server-bin)
-                  :major-modes '(sounanda-mode)
-                  :server-id 'sounanda-ls))
 
 (add-hook 'sounanda-mode-hook #'lsp)
 ```

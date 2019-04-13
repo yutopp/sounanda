@@ -1,0 +1,210 @@
+main: INT DIV INT LPAREN
+##
+## Ends in an error in state: 14.
+##
+## expr -> expr . PLUS expr [ TIMES SEMICOLON RPAREN PLUS MINUS DOT DIV ]
+## expr -> expr . MINUS expr [ TIMES SEMICOLON RPAREN PLUS MINUS DOT DIV ]
+## expr -> expr . TIMES expr [ TIMES SEMICOLON RPAREN PLUS MINUS DOT DIV ]
+## expr -> expr . DIV expr [ TIMES SEMICOLON RPAREN PLUS MINUS DOT DIV ]
+## expr -> expr DIV expr . [ TIMES SEMICOLON RPAREN PLUS MINUS DOT DIV ]
+## expr -> expr . DOT ID [ TIMES SEMICOLON RPAREN PLUS MINUS DOT DIV ]
+##
+## The known suffix of the stack is as follows:
+## expr DIV expr
+##
+
+<YOUR SYNTAX ERROR MESSAGE HERE>
+
+main: INT DIV TIMES
+##
+## Ends in an error in state: 13.
+##
+## expr -> expr DIV . expr [ TIMES SEMICOLON RPAREN PLUS MINUS DOT DIV ]
+##
+## The known suffix of the stack is as follows:
+## expr DIV
+##
+
+<YOUR SYNTAX ERROR MESSAGE HERE>
+
+main: INT DOT TIMES
+##
+## Ends in an error in state: 8.
+##
+## expr -> expr DOT . ID [ TIMES SEMICOLON RPAREN PLUS MINUS DOT DIV ]
+##
+## The known suffix of the stack is as follows:
+## expr DOT
+##
+
+<YOUR SYNTAX ERROR MESSAGE HERE>
+
+main: INT MINUS INT LPAREN
+##
+## Ends in an error in state: 16.
+##
+## expr -> expr . PLUS expr [ TIMES SEMICOLON RPAREN PLUS MINUS DOT DIV ]
+## expr -> expr . MINUS expr [ TIMES SEMICOLON RPAREN PLUS MINUS DOT DIV ]
+## expr -> expr MINUS expr . [ TIMES SEMICOLON RPAREN PLUS MINUS DOT DIV ]
+## expr -> expr . TIMES expr [ TIMES SEMICOLON RPAREN PLUS MINUS DOT DIV ]
+## expr -> expr . DIV expr [ TIMES SEMICOLON RPAREN PLUS MINUS DOT DIV ]
+## expr -> expr . DOT ID [ TIMES SEMICOLON RPAREN PLUS MINUS DOT DIV ]
+##
+## The known suffix of the stack is as follows:
+## expr MINUS expr
+##
+
+<YOUR SYNTAX ERROR MESSAGE HERE>
+
+main: INT MINUS TIMES
+##
+## Ends in an error in state: 15.
+##
+## expr -> expr MINUS . expr [ TIMES SEMICOLON RPAREN PLUS MINUS DOT DIV ]
+##
+## The known suffix of the stack is as follows:
+## expr MINUS
+##
+
+<YOUR SYNTAX ERROR MESSAGE HERE>
+
+main: INT PLUS INT LPAREN
+##
+## Ends in an error in state: 12.
+##
+## expr -> expr . PLUS expr [ TIMES SEMICOLON RPAREN PLUS MINUS DOT DIV ]
+## expr -> expr PLUS expr . [ TIMES SEMICOLON RPAREN PLUS MINUS DOT DIV ]
+## expr -> expr . MINUS expr [ TIMES SEMICOLON RPAREN PLUS MINUS DOT DIV ]
+## expr -> expr . TIMES expr [ TIMES SEMICOLON RPAREN PLUS MINUS DOT DIV ]
+## expr -> expr . DIV expr [ TIMES SEMICOLON RPAREN PLUS MINUS DOT DIV ]
+## expr -> expr . DOT ID [ TIMES SEMICOLON RPAREN PLUS MINUS DOT DIV ]
+##
+## The known suffix of the stack is as follows:
+## expr PLUS expr
+##
+
+<YOUR SYNTAX ERROR MESSAGE HERE>
+
+main: INT PLUS TIMES
+##
+## Ends in an error in state: 11.
+##
+## expr -> expr PLUS . expr [ TIMES SEMICOLON RPAREN PLUS MINUS DOT DIV ]
+##
+## The known suffix of the stack is as follows:
+## expr PLUS
+##
+
+<YOUR SYNTAX ERROR MESSAGE HERE>
+
+main: INT RPAREN
+##
+## Ends in an error in state: 22.
+##
+## expr -> expr . PLUS expr [ TIMES SEMICOLON PLUS MINUS DOT DIV ]
+## expr -> expr . MINUS expr [ TIMES SEMICOLON PLUS MINUS DOT DIV ]
+## expr -> expr . TIMES expr [ TIMES SEMICOLON PLUS MINUS DOT DIV ]
+## expr -> expr . DIV expr [ TIMES SEMICOLON PLUS MINUS DOT DIV ]
+## expr -> expr . DOT ID [ TIMES SEMICOLON PLUS MINUS DOT DIV ]
+## stmt -> expr . SEMICOLON [ MINUS LPAREN INT ID EOF ]
+##
+## The known suffix of the stack is as follows:
+## expr
+##
+
+<YOUR SYNTAX ERROR MESSAGE HERE>
+
+main: INT SEMICOLON TIMES
+##
+## Ends in an error in state: 20.
+##
+## list(stmt) -> stmt . list(stmt) [ EOF ]
+##
+## The known suffix of the stack is as follows:
+## stmt
+##
+
+<YOUR SYNTAX ERROR MESSAGE HERE>
+
+main: INT TIMES INT LPAREN
+##
+## Ends in an error in state: 7.
+##
+## expr -> expr . PLUS expr [ TIMES SEMICOLON RPAREN PLUS MINUS DOT DIV ]
+## expr -> expr . MINUS expr [ TIMES SEMICOLON RPAREN PLUS MINUS DOT DIV ]
+## expr -> expr . TIMES expr [ TIMES SEMICOLON RPAREN PLUS MINUS DOT DIV ]
+## expr -> expr TIMES expr . [ TIMES SEMICOLON RPAREN PLUS MINUS DOT DIV ]
+## expr -> expr . DIV expr [ TIMES SEMICOLON RPAREN PLUS MINUS DOT DIV ]
+## expr -> expr . DOT ID [ TIMES SEMICOLON RPAREN PLUS MINUS DOT DIV ]
+##
+## The known suffix of the stack is as follows:
+## expr TIMES expr
+##
+
+<YOUR SYNTAX ERROR MESSAGE HERE>
+
+main: INT TIMES TIMES
+##
+## Ends in an error in state: 6.
+##
+## expr -> expr TIMES . expr [ TIMES SEMICOLON RPAREN PLUS MINUS DOT DIV ]
+##
+## The known suffix of the stack is as follows:
+## expr TIMES
+##
+
+<YOUR SYNTAX ERROR MESSAGE HERE>
+
+main: LPAREN INT SEMICOLON
+##
+## Ends in an error in state: 5.
+##
+## expr -> expr . PLUS expr [ TIMES RPAREN PLUS MINUS DOT DIV ]
+## expr -> expr . MINUS expr [ TIMES RPAREN PLUS MINUS DOT DIV ]
+## expr -> expr . TIMES expr [ TIMES RPAREN PLUS MINUS DOT DIV ]
+## expr -> expr . DIV expr [ TIMES RPAREN PLUS MINUS DOT DIV ]
+## expr -> expr . DOT ID [ TIMES RPAREN PLUS MINUS DOT DIV ]
+## expr -> LPAREN expr . RPAREN [ TIMES SEMICOLON RPAREN PLUS MINUS DOT DIV ]
+##
+## The known suffix of the stack is as follows:
+## LPAREN expr
+##
+
+<YOUR SYNTAX ERROR MESSAGE HERE>
+
+main: LPAREN TIMES
+##
+## Ends in an error in state: 2.
+##
+## expr -> LPAREN . expr RPAREN [ TIMES SEMICOLON RPAREN PLUS MINUS DOT DIV ]
+##
+## The known suffix of the stack is as follows:
+## LPAREN
+##
+
+<YOUR SYNTAX ERROR MESSAGE HERE>
+
+main: MINUS TIMES
+##
+## Ends in an error in state: 1.
+##
+## expr -> MINUS . expr [ TIMES SEMICOLON RPAREN PLUS MINUS DOT DIV ]
+##
+## The known suffix of the stack is as follows:
+## MINUS
+##
+
+<YOUR SYNTAX ERROR MESSAGE HERE>
+
+main: TIMES
+##
+## Ends in an error in state: 0.
+##
+## main' -> . main [ # ]
+##
+## The known suffix of the stack is as follows:
+##
+##
+
+<YOUR SYNTAX ERROR MESSAGE HERE>
+

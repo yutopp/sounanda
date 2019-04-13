@@ -1,0 +1,11 @@
+(library
+ (name          sounanda_parser)
+ (libraries     base stdio menhirLib)
+ (preprocess
+  (pps ppx_sexp_conv ppx_compare ppx_let)))
+
+(ocamllex lexer)
+
+(menhir
+ (flags      (--table --inspection -v --explain -la 2))
+ (modules    syntax))

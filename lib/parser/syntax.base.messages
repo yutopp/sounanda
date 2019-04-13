@@ -1,0 +1,245 @@
+main: KEYWORD_VAR ID EQ ID SEMICOLON TIMES
+##
+## Ends in an error in state: 36.
+##
+## list(stmt) -> stmt . list(stmt) [ EOF ]
+##
+## The known suffix of the stack is as follows:
+## stmt
+##
+
+<YOUR SYNTAX ERROR MESSAGE HERE>
+
+main: KEYWORD_VAR ID EQ INT DIV TIMES
+##
+## Ends in an error in state: 18.
+##
+## expr -> expr DIV . expr [ TIMES SEMICOLON RPAREN RBRACE PLUS MINUS DOT DIV ]
+##
+## The known suffix of the stack is as follows:
+## expr DIV
+##
+
+<YOUR SYNTAX ERROR MESSAGE HERE>
+
+main: KEYWORD_VAR ID EQ INT DOT TIMES
+##
+## Ends in an error in state: 14.
+##
+## expr -> expr DOT . ID [ TIMES SEMICOLON RPAREN RBRACE PLUS MINUS DOT DIV ]
+##
+## The known suffix of the stack is as follows:
+## expr DOT
+##
+
+<YOUR SYNTAX ERROR MESSAGE HERE>
+
+main: KEYWORD_VAR ID EQ INT MINUS TIMES
+##
+## Ends in an error in state: 20.
+##
+## expr -> expr MINUS . expr [ TIMES SEMICOLON RPAREN RBRACE PLUS MINUS DOT DIV ]
+##
+## The known suffix of the stack is as follows:
+## expr MINUS
+##
+
+<YOUR SYNTAX ERROR MESSAGE HERE>
+
+main: KEYWORD_VAR ID EQ INT PLUS TIMES
+##
+## Ends in an error in state: 16.
+##
+## expr -> expr PLUS . expr [ TIMES SEMICOLON RPAREN RBRACE PLUS MINUS DOT DIV ]
+##
+## The known suffix of the stack is as follows:
+## expr PLUS
+##
+
+<YOUR SYNTAX ERROR MESSAGE HERE>
+
+main: KEYWORD_VAR ID EQ INT RPAREN
+##
+## Ends in an error in state: 31.
+##
+## expr -> expr . PLUS expr [ TIMES SEMICOLON PLUS MINUS DOT DIV ]
+## expr -> expr . MINUS expr [ TIMES SEMICOLON PLUS MINUS DOT DIV ]
+## expr -> expr . TIMES expr [ TIMES SEMICOLON PLUS MINUS DOT DIV ]
+## expr -> expr . DIV expr [ TIMES SEMICOLON PLUS MINUS DOT DIV ]
+## expr -> expr . DOT ID [ TIMES SEMICOLON PLUS MINUS DOT DIV ]
+## stmt_let -> KEYWORD_VAR ID EQ expr . SEMICOLON [ KEYWORD_VAR EOF ]
+##
+## The known suffix of the stack is as follows:
+## KEYWORD_VAR ID EQ expr
+##
+
+<YOUR SYNTAX ERROR MESSAGE HERE>
+
+main: KEYWORD_VAR ID EQ INT TIMES TIMES
+##
+## Ends in an error in state: 12.
+##
+## expr -> expr TIMES . expr [ TIMES SEMICOLON RPAREN RBRACE PLUS MINUS DOT DIV ]
+##
+## The known suffix of the stack is as follows:
+## expr TIMES
+##
+
+<YOUR SYNTAX ERROR MESSAGE HERE>
+
+main: KEYWORD_VAR ID EQ LBRACE ID COLON ID RPAREN
+##
+## Ends in an error in state: 25.
+##
+## separated_nonempty_list(SEMICOLON,compound_kv) -> compound_kv . [ RBRACE ]
+## separated_nonempty_list(SEMICOLON,compound_kv) -> compound_kv . SEMICOLON separated_nonempty_list(SEMICOLON,compound_kv) [ RBRACE ]
+##
+## The known suffix of the stack is as follows:
+## compound_kv
+##
+## WARNING: This example involves spurious reductions.
+## This implies that, although the LR(1) items shown above provide an
+## accurate view of the past (what has been recognized so far), they
+## may provide an INCOMPLETE view of the future (what was expected next).
+## In state 11, spurious reduction of production compound_kv -> ID COLON expr 
+##
+
+<YOUR SYNTAX ERROR MESSAGE HERE>
+
+main: KEYWORD_VAR ID EQ LBRACE ID COLON ID SEMICOLON TIMES
+##
+## Ends in an error in state: 26.
+##
+## separated_nonempty_list(SEMICOLON,compound_kv) -> compound_kv SEMICOLON . separated_nonempty_list(SEMICOLON,compound_kv) [ RBRACE ]
+##
+## The known suffix of the stack is as follows:
+## compound_kv SEMICOLON
+##
+
+<YOUR SYNTAX ERROR MESSAGE HERE>
+
+main: KEYWORD_VAR ID EQ LBRACE ID COLON TIMES
+##
+## Ends in an error in state: 8.
+##
+## compound_kv -> ID COLON . expr [ SEMICOLON RBRACE ]
+##
+## The known suffix of the stack is as follows:
+## ID COLON
+##
+
+<YOUR SYNTAX ERROR MESSAGE HERE>
+
+main: KEYWORD_VAR ID EQ LBRACE ID TIMES
+##
+## Ends in an error in state: 7.
+##
+## compound_kv -> ID . COLON expr [ SEMICOLON RBRACE ]
+##
+## The known suffix of the stack is as follows:
+## ID
+##
+
+<YOUR SYNTAX ERROR MESSAGE HERE>
+
+main: KEYWORD_VAR ID EQ LBRACE TIMES
+##
+## Ends in an error in state: 6.
+##
+## expr -> LBRACE . loption(separated_nonempty_list(SEMICOLON,compound_kv)) RBRACE [ TIMES SEMICOLON RPAREN RBRACE PLUS MINUS DOT DIV ]
+##
+## The known suffix of the stack is as follows:
+## LBRACE
+##
+
+<YOUR SYNTAX ERROR MESSAGE HERE>
+
+main: KEYWORD_VAR ID EQ LPAREN INT SEMICOLON
+##
+## Ends in an error in state: 28.
+##
+## expr -> expr . PLUS expr [ TIMES RPAREN PLUS MINUS DOT DIV ]
+## expr -> expr . MINUS expr [ TIMES RPAREN PLUS MINUS DOT DIV ]
+## expr -> expr . TIMES expr [ TIMES RPAREN PLUS MINUS DOT DIV ]
+## expr -> expr . DIV expr [ TIMES RPAREN PLUS MINUS DOT DIV ]
+## expr -> expr . DOT ID [ TIMES RPAREN PLUS MINUS DOT DIV ]
+## expr -> LPAREN expr . RPAREN [ TIMES SEMICOLON RPAREN RBRACE PLUS MINUS DOT DIV ]
+##
+## The known suffix of the stack is as follows:
+## LPAREN expr
+##
+
+<YOUR SYNTAX ERROR MESSAGE HERE>
+
+main: KEYWORD_VAR ID EQ LPAREN TIMES
+##
+## Ends in an error in state: 5.
+##
+## expr -> LPAREN . expr RPAREN [ TIMES SEMICOLON RPAREN RBRACE PLUS MINUS DOT DIV ]
+##
+## The known suffix of the stack is as follows:
+## LPAREN
+##
+
+<YOUR SYNTAX ERROR MESSAGE HERE>
+
+main: KEYWORD_VAR ID EQ MINUS TIMES
+##
+## Ends in an error in state: 4.
+##
+## expr -> MINUS . expr [ TIMES SEMICOLON RPAREN RBRACE PLUS MINUS DOT DIV ]
+##
+## The known suffix of the stack is as follows:
+## MINUS
+##
+
+<YOUR SYNTAX ERROR MESSAGE HERE>
+
+main: KEYWORD_VAR ID EQ TIMES
+##
+## Ends in an error in state: 3.
+##
+## stmt_let -> KEYWORD_VAR ID EQ . expr SEMICOLON [ KEYWORD_VAR EOF ]
+##
+## The known suffix of the stack is as follows:
+## KEYWORD_VAR ID EQ
+##
+
+<YOUR SYNTAX ERROR MESSAGE HERE>
+
+main: KEYWORD_VAR ID TIMES
+##
+## Ends in an error in state: 2.
+##
+## stmt_let -> KEYWORD_VAR ID . EQ expr SEMICOLON [ KEYWORD_VAR EOF ]
+##
+## The known suffix of the stack is as follows:
+## KEYWORD_VAR ID
+##
+
+<YOUR SYNTAX ERROR MESSAGE HERE>
+
+main: KEYWORD_VAR TIMES
+##
+## Ends in an error in state: 1.
+##
+## stmt_let -> KEYWORD_VAR . ID EQ expr SEMICOLON [ KEYWORD_VAR EOF ]
+##
+## The known suffix of the stack is as follows:
+## KEYWORD_VAR
+##
+
+<YOUR SYNTAX ERROR MESSAGE HERE>
+
+main: TIMES
+##
+## Ends in an error in state: 0.
+##
+## main' -> . main [ # ]
+##
+## The known suffix of the stack is as follows:
+##
+##
+
+<YOUR SYNTAX ERROR MESSAGE HERE>
+

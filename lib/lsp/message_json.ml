@@ -110,6 +110,8 @@ module Adapter = struct
             Some (
                 [
                   "initialize";
+                  "textDocument/didOpen";
+                  "textDocument/didChange";
                   "textDocument/completion";
                   "completionItem/resolve";
                 ],

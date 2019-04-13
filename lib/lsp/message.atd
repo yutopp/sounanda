@@ -13,6 +13,9 @@ type message_params_constr = [
   | RequestInitialize <json name="initialize"> of initialize_params
   | RequestTextDocumentCompletion <json name="textDocument/completion"> of completion_params
   | RequestCompletionItemResolve <json name="completionItem/resolve"> of completion_item
+  | NotificationTextDocumentDidOpen <json name="textDocument/didOpen"> of did_open_text_document_params
+  | NotificationTextDocumentDidChange <json name="textDocument/didChange"> of did_change_text_document_params
+  | NotificationPublishDiagnostics <json name="textDocument/publishDiagnostics"> of publish_diagnostics_params
   | Unknown <json untyped> of (string * json nullable)
   ]
 
@@ -373,6 +376,7 @@ type server_capabilities = {
 
 
 type completion_params = {
+  inherit text_document_position_params;
   (**
    * The completion context. This is only available if the client specifies
    * to send this using `ClientCapabilities.textDocument.completion.contextSupport === true`
@@ -546,3 +550,151 @@ type completion_item = {
    *)
   ?data <json name="data">: json nullable;
 } <ocaml field_prefix="completion_item_">
+
+type document_uri = string
+
+type text_document_identifier = {
+  uri <json name="uri">: document_uri;
+} <ocaml field_prefix="text_document_identifier_">
+
+type versioned_text_document_identifier = {
+  inherit text_document_identifier;
+  ?version <json name="version">: int nullable;
+} <ocaml field_prefix="versioned_text_document_identifier_">
+
+type text_document_item = {
+  (**
+   * The text document's URI.
+   *)
+  uri <json name="uri">: document_uri;
+
+  (**
+   * The text document's language identifier.
+   *)
+  language_id <json name="languageId">: string;
+
+  (**
+   * The version number of this document (it will increase after each
+   * change, including undo/redo).
+   *)
+  version <json name="version">: int;
+
+  (**
+   * The content of the opened text document.
+   *)
+  text <json name="text">: string;
+} <ocaml field_prefix="text_document_item_">
+
+type did_open_text_document_params = {
+  text_document <json name="textDocument">: text_document_item;
+} <ocaml field_prefix="did_open_text_document_params_">
+
+type text_document_position_params = {
+  (**
+   * The text document.
+   *)
+  text_document <json name="textDocument">: text_document_identifier;
+
+  (**
+   * The position inside the text document.
+   *)
+  position <json name="position">: position;
+} <ocaml field_prefix="text_document_position_params_">
+
+type position = {
+  (**
+   * Line position in a document (zero-based).
+   *)
+  line <json name="line">: int;
+
+  (**
+   * Character offset on a line in a document (zero-based). Assuming that the line is
+   * represented as a string, the `character` value represents the gap between the
+   * `character` and `character + 1`.
+   *
+   * If the character value is greater than the line length it defaults back to the
+   * line length.
+   *)
+  character <json name="character">: int;
+} <ocaml field_prefix="position_">
+
+type range = {
+  (**
+   * The range's start position.
+   *)
+  start <json name="start">: position;
+
+  (**
+   * The range's end position.
+   *)
+  end_ <json name="end">: position;
+} <ocaml field_prefix="range_">
+
+type text_document_content_change_event = {
+  (**
+   * The range of the document that changed.
+   *)
+  ?range <json name="range">: range nullable;
+
+  (**
+   * The length of the range that got replaced.
+   *)
+  ?range_length <json name="rangeLength">: int nullable;
+
+  (**
+   * The new text of the range/document.
+   *)
+  text <json name="text">: string;
+} <ocaml field_prefix="text_document_content_change_event_">
+
+type did_change_text_document_params = {
+  text_document <json name="textDocument">: versioned_text_document_identifier;
+  content_changes <json name="contentChanges">: text_document_content_change_event list;
+} <ocaml field_prefix="did_change_text_document_params_">
+
+type diagnostic = {
+  (**
+   * The range at which the message applies.
+   *)
+  range <json name="range">: range;
+
+  (**
+   * The diagnostic's severity. Can be omitted. If omitted it is up to the
+   * client to interpret diagnostics as error, warning, info or hint.
+   *)
+  ?severity <json name="severity">: int nullable;
+
+  (**
+   * The diagnostic's code, which might appear in the user interface.
+   *)
+  ?code <json name="code">: int nullable;
+
+  (**
+   * A human-readable string describing the source of this
+   * diagnostic, e.g. 'typescript' or 'super lint'.
+   *)
+  ?source <json name="source">: string nullable;
+
+  (**
+   * The diagnostic's message.
+   *)
+  message <json name="message">: string;
+
+  (**
+   * An array of related diagnostic information, e.g. when symbol-names within
+   * a scope collide all definitions can be marked via this property.
+   *)
+  (* TODO: relatedInformation?: DiagnosticRelatedInformation[];*)
+} <ocaml field_prefix="diagnostic_">
+
+type publish_diagnostics_params = {
+  (**
+   * The URI for which diagnostic information is reported.
+   *)
+  uri <json name="uri">: document_uri;
+
+  (**
+   * An array of diagnostic information items.
+   *)
+  diagnostics <json name="diagnostics">: diagnostic list;
+} <ocaml field_prefix="publish_diagnostics_params_">

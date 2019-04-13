@@ -1,6 +1,6 @@
 (library
  (name sounanda_lsp)
- (libraries base stdio sexplib yojson atdgen)
+ (libraries sounanda_parser sounanda_sema base stdio sexplib yojson atdgen)
  (preprocess
   (pps ppx_let)))
 
